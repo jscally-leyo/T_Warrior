@@ -7,6 +7,9 @@
 /DerivedDataCache
 /Intermediate
 /Saved
+*.uasset
+*.umap
+*.fbx
 
 #################################
 # Visual Studio Generated Files #
