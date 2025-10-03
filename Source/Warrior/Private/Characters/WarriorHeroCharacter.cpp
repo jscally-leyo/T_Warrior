@@ -14,6 +14,7 @@
 #include "AbilitySystem/WarriorAttributeSet.h"
 
 #include "WarriorDebugHelper.h"
+#include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
@@ -46,14 +47,13 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if (WarriorAbilitySystemComponent && WarriorAttributeSet)
+	if (!CharacterStartUpData.IsNull()) // instead of .IsValid because CharacterStartUpData is a soft reference
 	{
-		const FString ASCText = FString::Printf(TEXT("Owner actor: %s, Avatar Actor: %s"),
-			*WarriorAbilitySystemComponent->GetOwnerActor()->GetActorLabel(),
-			*WarriorAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
-		Debug::Print(TEXT("Ability systems component valid. ") + ASCText, FColor::Green);
-		Debug::Print(TEXT("AttributeSet valid."), FColor::Green);
-	}
+		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+		{
+			LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+		}
+	};
 }
 
 void AWarriorHeroCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

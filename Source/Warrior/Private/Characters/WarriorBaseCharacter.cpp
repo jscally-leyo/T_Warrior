@@ -31,6 +31,11 @@ void AWarriorBaseCharacter::PossessedBy(AController* NewController)
 	{
 		WarriorAbilitySystemComponent->InitAbilityActorInfo(this, this);
 	}
+
+	// in debug-mode the 'ensure' will trigger a breakpoint + it will output to logs
+	ensureMsgf(!CharacterStartUpData.IsNull(), TEXT("Forgot to assign start up data to %s"), *GetName());
+
+	
 }
 
 
